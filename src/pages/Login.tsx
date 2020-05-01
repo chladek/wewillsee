@@ -1,10 +1,44 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+import { useLoginMutation } from '../generated/graphql';
 
-interface Props {}
+const Login: React.FC<RouteComponentProps> = ({ history }) => {
+  const [username, setusername] = useState('');
+  const [password, setpassword] = useState('');
+  const [login] = useLoginMutation();
 
-const Login: React.FC<Props> = () => {
-  return <div>login</div>;
+  return (
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        await login({
+          variables: { username, password },
+        });
+        history.push('/');
+      }}
+    >
+      <div>
+        <input
+          value={username}
+          placeholder="username"
+          onChange={(e) => {
+            setusername(e.target.value);
+          }}
+        />
+      </div>
+      <div>
+        <input
+          type="password"
+          value={password}
+          placeholder="password"
+          onChange={(e) => {
+            setpassword(e.target.value);
+          }}
+        />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  );
 };
 
 export default Login;
