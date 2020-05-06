@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useLoginMutation } from '../generated/graphql';
+import { setAccessToken } from '../token';
 
 const Login: React.FC<RouteComponentProps> = ({ history }) => {
   const [username, setusername] = useState('');
@@ -11,9 +12,12 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
     <form
       onSubmit={async (e) => {
         e.preventDefault();
-        await login({
+        const res = await login({
           variables: { username, password },
         });
+        if (res && res.data) {
+          setAccessToken(res.data.login.accessToken);
+        }
         history.push('/');
       }}
     >

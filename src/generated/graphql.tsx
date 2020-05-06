@@ -21,6 +21,7 @@ export type User = {
   newPassword: Scalars['String'];
   newPasswordConfirm: Scalars['Boolean'];
   salt: Scalars['String'];
+  tokenVersion: Scalars['Float'];
 };
 
 export type AccessToken = {
@@ -49,6 +50,8 @@ export type QueryGetUserArgs = {
 export type Mutation = {
    __typename?: 'Mutation';
   login: AccessToken;
+  test: Scalars['Boolean'];
+  revokeRefreshTokensForUser: Scalars['Boolean'];
   register: User;
   resetPassword: Message;
   updateUser: Scalars['Boolean'];
@@ -58,6 +61,16 @@ export type Mutation = {
 
 export type MutationLoginArgs = {
   loginInput: LoginInput;
+};
+
+
+export type MutationTestArgs = {
+  xd: Scalars['String'];
+};
+
+
+export type MutationRevokeRefreshTokensForUserArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -99,6 +112,17 @@ export type ProfileInput = {
   password?: Maybe<Scalars['String']>;
 };
 
+export type GetUsersQueryVariables = {};
+
+
+export type GetUsersQuery = (
+  { __typename?: 'Query' }
+  & { getUsers: Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'username'>
+  )> }
+);
+
 export type HelloQueryVariables = {};
 
 
@@ -137,6 +161,38 @@ export type RegisterMutation = (
 );
 
 
+export const GetUsersDocument = gql`
+    query getUsers {
+  getUsers {
+    username
+  }
+}
+    `;
+
+/**
+ * __useGetUsersQuery__
+ *
+ * To run a query within a React component, call `useGetUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUsersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUsersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUsersQuery, GetUsersQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, baseOptions);
+      }
+export function useGetUsersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUsersQuery, GetUsersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, baseOptions);
+        }
+export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
+export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
+export type GetUsersQueryResult = ApolloReactCommon.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
 export const HelloDocument = gql`
     query Hello {
   hello
