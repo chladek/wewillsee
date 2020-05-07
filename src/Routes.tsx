@@ -4,8 +4,11 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Users from './pages/Users';
+import { useLogoutMutation } from './generated/graphql';
+import { setAccessToken } from './token';
 
 const Routes: React.FC = () => {
+  const [logout] = useLogoutMutation();
   return (
     <BrowserRouter>
       <div>
@@ -22,6 +25,16 @@ const Routes: React.FC = () => {
             </div>
             <div>
               <Link to="/users">users</Link>
+            </div>
+            <div>
+              <button
+                onClick={async () => {
+                  await logout();
+                  setAccessToken('');
+                }}
+              >
+                Logout
+              </button>
             </div>
           </div>
         </header>
